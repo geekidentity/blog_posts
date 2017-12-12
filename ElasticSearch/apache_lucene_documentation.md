@@ -1,1 +1,0 @@
-# Apache LuceneTM 6.6.0 Documentation
