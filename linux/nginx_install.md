@@ -85,6 +85,9 @@ make install
 cd /usr/local/src
 wget https://www.openssl.org/source/openssl-1.1.0g.tar.gz
 tar -zxvf openssl-1.1.0g.tar.gz
+./config
+make
+make install
 ```
 
 # 5.安装nginx
