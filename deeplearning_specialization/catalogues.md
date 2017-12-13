@@ -39,9 +39,9 @@ date: 2017-12-11
 学习驱动神经网络兴起的主要技术趋势，了解现今深度学习在哪里应用、如何应用。
 
 ### 1.1  [欢迎来到深度学习工程师微专业（Welcome）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/1_welcome/)
-### 1.2  什么是神经网络？（What is a neural network?）
-### 1.3  用神经网络进行监督学习（Supervised Learning with Neural Networks）
-### 1.4  为什么深度学习会兴起？（Why is Deep Learning taking off?）
+### 1.2  [什么是神经网络？（What is a neural network?）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/2_what-is-a-neural-network/)
+### 1.3  [用神经网络进行监督学习（Supervised Learning with Neural Networks）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/3_supervised-learning-with-neural-networks/)
+### 1.4  [为什么深度学习会兴起？（Why is Deep Learning taking off?）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/4_why-is-deep-learning-taking-off/)
 ### 1.5  关于这门课（About this Course）
 ### 1.6  课程资源（Course Resources）
 
