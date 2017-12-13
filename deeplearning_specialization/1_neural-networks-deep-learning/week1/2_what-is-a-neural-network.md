@@ -9,7 +9,7 @@ tags:
 
 title: 神经网络和深度学习-第一周深度学习概论-第二节：什么是神经网络
 
-date: 2017-12-11
+date: 2017-12-13
 ---
 
 全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
