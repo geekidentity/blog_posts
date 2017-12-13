@@ -1,5 +1,5 @@
 ---
-categories: AI
+categories: Deep Learning
 
 tags: 
   - AI
