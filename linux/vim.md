@@ -1,4 +1,12 @@
+---
+categories: linux
+tags:
+  - Linux
+  - VIM
 
+title: 配置 vimrc
+date: 2017-11-18
+---
 # 配置 vimrc
 
 在Home 目录下创建一个 .vimrc 文件来设置Vim属性。
