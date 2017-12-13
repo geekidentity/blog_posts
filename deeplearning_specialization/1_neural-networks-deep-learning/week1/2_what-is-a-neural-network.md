@@ -12,7 +12,7 @@ title: 神经网络和深度学习-第一周深度学习概论-第二节：什�
 date: 2017-12-13
 ---
 
-全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
 
 # 什么是神经网络
 
