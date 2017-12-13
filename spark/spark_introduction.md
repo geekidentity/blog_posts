@@ -1,3 +1,11 @@
+categories: Spark
+
+tags: 
+  - Spark
+
+title: Spark 介绍
+
+date: 2017-12-01
 
 # Spark 技术背景
 
@@ -17,7 +25,7 @@ RDD提供了一种高度受限的共享内存模型，即RDD是只读记录分�
 1. 速度：与Hadoop的MapReduce相比，Spark基于内存的运算要快100倍以上；而基于硬盘的运算也要快10倍以上。Spark实现了高效的DAG执行引擎，可以通过基于内存来高效处理数据流。
 2. 易用：Spark支持Scala、Python和Java的API，还支持大量高级算法，使用户可能 快速构建不同的应用。而且Spark还支持交互式的Python和Scala，方便原型的快速开发。
 3. 通用：Spark提供了统一的解决方案。Spark可以用于批处理、交互式查询（Spark SQL）、实时流处理（Spark Streaming）、机器学习（Spark MLlib）和图计算（Spark GraphX）。这些不同类型的处理都可以在同一个应用中无缝使用。
-![image](http://blog.geekidentity.com/images/spark_introduce/spark_1.png)
+  ![image](http://blog.geekidentity.com/images/spark_introduce/spark_1.png)
 
 4. 可融合性：Spark可以方便地与其他开源产品融合。
 
@@ -72,23 +80,23 @@ Spark GraphX是Spark提供的关于图和图并行计算的API，它集ETL、试
 RDD 是一种高度受限的共享内存模型，即RDD 是只读记录分区的集合，只能通过在其他RDD  执行确定的转换操作（如map、join、groupBy等）而创建。RDD含有如何从其他RDD衍生（即计算）出本RDD的相关信息（即Lineage），因此在RDD部分分区数据丢失的时候可以从物理存储的数据计算出相应的RDD分区。
 
 1. 一组分片（Partition），即数据集的基本组成单位。对于RDD来说，每个分片都会被一个计算任务处理，并决定并行计算的
-粒度。用户可以在创建RDD时指定RDD的分片个数，如果没有指定，那么就会采用默认值。默认值就是程序所分配到的CPU
-Core的数目。
+  粒度。用户可以在创建RDD时指定RDD的分片个数，如果没有指定，那么就会采用默认值。默认值就是程序所分配到的CPU
+  Core的数目。
 
 2. 一个计算每个分区的函数。Spark中RDD的计算是以分片为单位的，每个RDD都会实现compute函数以达到这个目的。
-compute函数会对迭代器进行复合，不需要保存每次计算的结果。
+  compute函数会对迭代器进行复合，不需要保存每次计算的结果。
 
 3. RDD之间的依赖关系。RDD的每次转换都会生成一个新的RDD，所以RDD之间就会形成类似于流水线一样的前后依赖关
-系。在部分分区数据丢失时，Spark可以通过这个依赖关系重新计算丢失的分区数据，而不是对RDD的所有分区进行重新计
-算。
+  系。在部分分区数据丢失时，Spark可以通过这个依赖关系重新计算丢失的分区数据，而不是对RDD的所有分区进行重新计
+  算。
 
 4. 一个Partitioner，即RDD的分片函数。当前Spark中实现了两种类型的分片函数，一个是基于哈希的HashPartitioner，另外一个
-是基于范围的RangePartitioner。只有对于key-value的RDD，才会有Partitioner，非key-value的RDD的Parititioner的值是None。
-Partitioner函数不但决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出时的分片数量。
+  是基于范围的RangePartitioner。只有对于key-value的RDD，才会有Partitioner，非key-value的RDD的Parititioner的值是None。
+  Partitioner函数不但决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出时的分片数量。
 
 5. 一个列表，存储存取每个Partition的优先位置（preferred location）。对于一个HDFS文件来说，这个列表保存的就是每个
-Partition所在的块的位置。按照“移动数据不如移动计算”的理念，Spark在进行任务调度的时候，会尽可能地将计算任务分配到
-其所要处理数据块的存储位置。
+  Partition所在的块的位置。按照“移动数据不如移动计算”的理念，Spark在进行任务调度的时候，会尽可能地将计算任务分配到
+  其所要处理数据块的存储位置。
 
 ## RDD操作
 
