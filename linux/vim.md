@@ -2,7 +2,7 @@
 categories: linux
 tags:
   - Linux
-  - VIM
+  - Vim
 
 title: 配置 vimrc
 date: 2017-11-18
