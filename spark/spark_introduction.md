@@ -1,3 +1,4 @@
+---
 categories: Spark
 
 tags: 
@@ -6,7 +7,7 @@ tags:
 title: Spark 介绍
 
 date: 2017-12-01
-
+---
 # Spark 技术背景
 
 在Spark 之前，大多数集群编程模型（如MapReduce、Dryad等）是基于非循环的数据流模型。即从稳定的物理存储（如HDFS）中加载记录，记录被传入由一组确定性操作构成的DAG（Directed Acyclic Graph，有向无环图），然后写回稳定存储。DAG 数据流图有够在运行时自动实现任务调度和故障恢复。
