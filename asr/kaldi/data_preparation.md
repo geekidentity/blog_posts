@@ -1,10 +1,11 @@
 ---
-categories: kaldi
+categories: Kaldi
 
 tags: 
   - AI
   - 语音识别
   - Kaldi
+  - ASR
 
 title: Kaldi官方文档（中文版） - 数据准备
 date: 2017-08-09

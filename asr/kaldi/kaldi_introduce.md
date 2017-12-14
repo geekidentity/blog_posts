@@ -1,8 +1,11 @@
 ---
-categories: AI
+categories: Kaldi
 
 tags: 
   - AI
+  - ASR
+  - Kaldi
+  - 语音识别
 
 title: 1 - 关于Kaldi项目
 date: 2017-08-06

@@ -1,13 +1,14 @@
 ---
-categories: kaldi
+categories: Kaldi
 
 tags: 
   - AI
   - 语音识别
   - Kaldi
+  - ASR
 
 title: Kaldi官方文档（中文版） - Kaldi教程
-
+date: 2017-08-09
 ---
 
 # Kaldi教程
@@ -225,7 +226,7 @@ head silence_phones.txt
 * \*silence\*.txt：这些文件包含有关哪些电话是无声的，哪些不是。
 
  现在回到数据目录并将目录更改为/train。 然后执行以下命令查看此目录中文件的输出：
- 
+
 ```
 head text
 head spk2gender.map
