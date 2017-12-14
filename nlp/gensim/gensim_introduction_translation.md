@@ -6,7 +6,7 @@ tags:
   - NLP
   - 翻译
 
-title: AI来了，你准备好了吗？
+title: Gensim官方介绍翻译
 
 date: 2017-12-14
 ---
