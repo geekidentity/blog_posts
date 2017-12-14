@@ -71,7 +71,7 @@ Gensim没有规定任何特殊的语料库格式，一个语料库可以是任�
 
 参考：
 
-[1]: http://blog.csdn.net/questionfish/article/details/46715795	"Gensim官方介绍翻译"
+[1][Gensim官方介绍翻译](http://blog.csdn.net/questionfish/article/details/46715795)
 
 
 
