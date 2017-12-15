@@ -6,12 +6,10 @@ tags:
   - NLP
   - 翻译
 
-title: Gensim官方教程翻译（一）——快速入门
+title: Gensim官方教程翻译——快速入门
 
-date: 2017-12-14
+date: 2017-12-15
 ---
-# Gensim官方教程翻译（一）——快速入门
-
 原文：https://radimrehurek.com/gensim/tutorial.html
 
 本教程按照一系列的例子组织，用以突出gensim的各种功能。本教程的受众是熟悉[Python](http://www.python.org/)，已经[安装了gensim](http://radimrehurek.com/gensim/install.html)，而且阅读过[介绍](http://blog.geekidentity.com/nlp/gensim/gensim_introduction_translation/)的读者。
