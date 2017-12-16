@@ -9,7 +9,7 @@ tags:
 
 title: Gensim官方教程翻译（三）——相似度查询（Similarity Queries）
 
-date: 2017-12-17
+date: 2017-12-18
 ---
 
 如果想要开启日志，别忘记设置：
@@ -35,7 +35,7 @@ MmCorpus(9 documents, 12 features, 28 non-zero entries)12345
 为了模仿Deerwester的例子，我们首先用这个微型语料库来定义一个2维LSI空间：
 
 ```python
-lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)1
+lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)
 ```
 
 现在假设一个用户键入查询“Human computer interaction”，我们应该对我们的九个语料库文档按照与该输入的关联性逆向排序。与现代搜索引擎不同，我们仅集中关注一个单一方面的可能的相似性——文本（单词）的语义关联性。没有超链接，没有随机行走静态排列，只是在关键词布尔匹配的基础上进行了语义扩展。
@@ -74,7 +74,7 @@ lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)1
 
 为了获得我们的查询文档相对于其他9个经过索引的文档的相似度：
 
-```
+```python
 >>> sims = index[vec_lsi] # perform a similarity query against the corpus
 >>> print(list(enumerate(sims))) # print (document_number, document_similarity) 2-tuples
 [(0, 0.99809301), (1, 0.93748635), (2, 0.99844527), (3, 0.9865886), (4, 0.90755945),
@@ -84,7 +84,7 @@ lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=2)1
 余弦方法返回的相似度在-1~1之间（越大越相似），所以第一个文档分数为0.99809301等。 
 使用一些标准Python函数，我们将这些相似性倒序排列，并且获得了查询“Human computer interaction”的结果。
 
-```
+```python
 >>> sims = sorted(enumerate(sims), key=lambda item: -item[1])
 >>> print(sims) # print sorted (document number, similarity score) 2-tuples
 [(2, 0.99844527), # The EPS user interface management system
