@@ -1,5 +1,5 @@
 ---
-categories: Deep Learning
+categories: 深度学习工程师
 
 tags: 
   - AI
