@@ -1,5 +1,5 @@
 ---
-categories: Deep Learning
+categories: 深度学习工程师
 
 tags: 
   - AI
@@ -8,7 +8,7 @@ tags:
 
 title: 第一门课-神经网络和深度学习-第一周深度学习概论-第五节：关于这门课
 
-date: 2017-12-13
+date: 2017-12-16
 ---
 
 本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。
