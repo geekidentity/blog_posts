@@ -8,7 +8,7 @@ tags:
 
 title: 第一门课-神经网络和深度学习-第一周深度学习概论-第四节：为什么深度学习会兴起？
 
-date: 2017-12-12
+date: 2017-12-15
 ---
 
 本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。
@@ -16,7 +16,7 @@ date: 2017-12-12
 如果在深度学习和神经网络背后的基本技术理论已经有好几十年了，为什么现在才突然流行起来呢？这一节来看一些让深度学习流行起来的主要原因，这将会帮助你在自己的组织中发现好机会来应用这些东西。
 
 在过去的几年里，很多人问我为什么深度学习突然这么厉害了，我回答的时候通常给他们画个图：
-![image](http://blog.geekidentity.com/images/deeplearning_AndrewNg/week_1/lesson4/ml_performance.png)
+![image](http://blog.geekidentity.com/images/deeplearning_specialization/neural-networks-deep-learning/week1/4_why-is-deep-learning-taking-off/ml_performance.png)
 
 水平轴上代表完成任务的数量，纵轴代表机器学习算法的性能，比如垃圾邮件过滤的准确率，广告点击预测的准备率用于无人驾驶中判断其他车辆位置的神经网络的准确率。根据图像可以发现，把传统机器学习算法的表现，比如说支持向量机或logistic回归作为数据量的一个函数，你可能得到这样的曲线：它的性能一开始随数据的增加会上升，但一段时间之后，它的性能进入平台期。这是因为这些模型无法处理海量数据。而过去20年，在我们的社会中我们遇到的很多问题早期只有相对较少的数据量，多亏了数字化社会，现在收集海量数据轻而易举，但这远超传统学习算法能发挥作用的规模。
 
@@ -27,4 +27,4 @@ date: 2017-12-12
 > 当数据量小的时候，各种算法的性能排名并不是很确定，只有当数据非常大的时候神经网络稳定地领先其它算法。
 
 神经网络的发展也需要更快速的计算，其中一个重要的原因是，训练神经网络的过程中，很多时候是凭直觉的。你有了新想法，关于神经网络架构的想法，然后你写代码实现你的想法，然后跑一下实验，可以告诉你你的神经网络效果怎么样；知道结果后再回去改，然后不断重复这个循环。如果神经网络需要很长时间才能计算一次会对你的效率产生巨大影响。
-![image](http://blog.geekidentity.com/images/deeplearning_AndrewNg/week_1/lesson4/idea_code_experiment.png)
+![image](http://blog.geekidentity.com/images/deeplearning_specialization/neural-networks-deep-learning/week1/4_why-is-deep-learning-taking-off/idea_code_experiment.png)
