@@ -20,7 +20,7 @@ date: 2017-12-18
 
 在本周课程中，我会用logistic回归来阐述，以便你能更好地理解。如果你之前学习过logistic回归，我也认为，这周的学习材料也会带给你一些新的、有意思的想法。下面正式开始。
 
-Logistic回归是一个用于二分分类的算法，我们从一个问题开始。这里有一个二分分类问题的例子，例如你有一张图片作为输入，就像这样，你想输出识别此图的标签，如果是猫输出1，如果不是则输出0，我们用y来表示输出的结果标签：
+Logistic回归是一个用于二分分类的算法，我们从一个问题开始。这里有一个二分分类问题的例子，例如你有一张图片作为输入，就像这样，你想输出识别此图的标签，如果是猫输出1，如果不是则输出0，我们用$y$来表示输出的结果标签：
 
 ![识别猫](http://blog.geekidentity.com/images/deeplearning_specialization/neural-networks-deep-learning/week2/1_binary-classification/recognize_cat.png)
 
@@ -45,17 +45,17 @@ $$
 用小写字母$m$ 表示训练集的个数，有时为了强调这个字母是训练集的个数可以写作$m_{train}$，用$m_{test}$表示测试集的样本数量。最后，用更紧凑的符号表示训练集，我们定义一个矩阵，用大写的$X$表示，它由训练集中的$x^{(1)},x^{(2)}, \, ... \, x^{(m)}$组成：
 $$
 X= \begin{bmatrix}
-    \mid \quad \mid \quad \quad  \quad \mid \\
-    x^{(1)} \; x^{(2)} \; ... x^{(m)} \\
-    \mid \quad \mid \quad \quad  \quad \mid \\
-\end{bmatrix},
+    \mid & \mid & \quad & \mid \\
+    x^{(1)} & x^{(2)} & ...  & x^{(m)} \\
+    \mid & \mid & \quad  & \mid \\
+\end{bmatrix}
 \qquad X \in R^{n_x \times m}
 $$
 这个矩阵由m列组成，高度为$n_x$，
 
 > 注意：有时候矩阵$X$的定义是训练样本作为行向量堆叠，而不是这样列向量堆叠。在构建神经网络时，用上述这种约定形式，会让构建过程列简单。
 
-当你用Python实现的时候你会看到`X.shape`，这条Python命令用来输出矩阵的维度，即$(n_x,m)$。
+当你用Python实现的时候你会看到`X.shape()`，这条Python命令用来输出矩阵的维度，即$(n_x,m)$。
 
 这就是如何将训练样本，即输入$x$用矩阵表示，对于输出标签$y$同样为了方便构一个建神经网络将$y$标签也放到列中，所以我们定义
 
