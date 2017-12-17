@@ -11,7 +11,7 @@ title: 第一门课-神经网络和深度学习-第一周深度学习概论-第�
 date: 2017-12-15
 ---
 
-本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
 
 如果在深度学习和神经网络背后的基本技术理论已经有好几十年了，为什么现在才突然流行起来呢？这一节来看一些让深度学习流行起来的主要原因，这将会帮助你在自己的组织中发现好机会来应用这些东西。
 
