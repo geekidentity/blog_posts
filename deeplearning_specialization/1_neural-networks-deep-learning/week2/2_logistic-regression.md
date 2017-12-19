@@ -15,6 +15,8 @@ title: 神经网络和深度学习-第二周神经网络基础-第二节：Logis
 date: 2017-12-19
 ---
 
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
+
 本节将会讲解logistic回归，logistic是一个学习算法，用在监督学习问题中输出标签y是0或1的时候，这是一个二元分类问题。
 
 已知的输入特征向量x可能是一张图，你希望识别出这个图里是不是一只猫。你需要一个算法可以给出一个预测值我们说预测值$\hat{y}$，就是你对y的预测。更正式的说，你希望$\hat{y}$是一个概率，当输入特征x满足条件时y就是1。所以换句话说，如果x是图片，正如我们在上一节中看到，你希望$\hat{y}$能告诉你这个图里是猫的概率。所以x正如我们之前课程里所说的是一个$n_x$维向量：

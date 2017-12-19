@@ -12,7 +12,7 @@ title: 神经网络和深度学习-第二周神经网络基础-第一节：二�
 date: 2017-12-18
 ---
 
-本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
 
 本周，我们会学习神经网络编程的基础知识。当你要构建一个神经网络，有些技巧是相当重要的。例如，如果你有m个样本的训练集，你可能会习惯性地去用一个for循环来遍历这m个样本。但事实上实现一个神经网络，如果你要遍历整个训练集，燕不需要直接使用for循环。在本周的课程，你会学到如何做到。
 
