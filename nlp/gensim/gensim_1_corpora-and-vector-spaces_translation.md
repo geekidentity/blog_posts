@@ -174,14 +174,15 @@ Dictionary(12 unique tokens)
 相似的，为了构造dictionary我们也不必将全部文档读入内存：
 
 ```python
+>>> from six import iteritems
 >>> # 收集所有符号的统计信息
 >>> dictionary = corpora.Dictionary(line.lower().split() for line in open('mycorpus.txt'))
->>> # 收集停用词和仅出现一次的词的id
+>>> # 删除停用词和仅出现一次的词
 >>> stop_ids = [dictionary.token2id[stopword] for stopword in stoplist
 >>>             if stopword in dictionary.token2id]
->>> once_ids = [tokenid for tokenid, docfreq in dictionary.dfs.iteritems() if docfreq == 1]
->>> dictionary.filter_tokens(stop_ids + once_ids) # 删除停用词和仅出现一次的词
->>> dictionary.compactify() # 消除id序列在删除词后产生的不连续的缺口
+>>> once_ids = [tokenid for tokenid, docfreq in iteritems(dictionary.dfs) if docfreq == 1]
+>>> dictionary.filter_tokens(stop_ids + once_ids)  # 删除停用词和仅出现一次的词
+>>> dictionary.compactify()  # 消除id序列在删除词后产生的不连续的缺口
 >>> print(dictionary)
 Dictionary(12 unique tokens)
 ```
