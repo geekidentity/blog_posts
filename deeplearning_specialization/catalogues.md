@@ -1,5 +1,5 @@
 ---
-categories: Deep Learning
+categories: 深度学习工程师
 
 tags: 
   - AI
@@ -24,7 +24,7 @@ date: 2017-12-11
 * 能够搭建、训练并且运用全连接的深层神经网络。
 * 了解如何实现高效的（向量化）的神经网络。
 * 理解神经网络架构中的关键参数。
- 
+
 这门课将会详尽地介绍深度学习的基本原理，而不仅仅只进行理论概述。
 
 当你完成这门微专业之后，你就能够将深度学习运用到你的个人应用中，调教出属于你自己的AI。
@@ -42,20 +42,25 @@ date: 2017-12-11
 ### 1.2  [什么是神经网络？（What is a neural network?）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/2_what-is-a-neural-network/)
 ### 1.3  [用神经网络进行监督学习（Supervised Learning with Neural Networks）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/3_supervised-learning-with-neural-networks/)
 ### 1.4  [为什么深度学习会兴起？（Why is Deep Learning taking off?）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/4_why-is-deep-learning-taking-off/)
-### 1.5  关于这门课（About this Course）
-### 1.6  课程资源（Course Resources）
+### 1.5  [关于这门课（About this Course）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/5_about-this-course/)
 
- 
+### 1.6  [课程资源（Course Resources）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week1/6_course-resources/)
+
 ## 第二周  神经网络基础（Neural Networks Basics）
 
 学习如何用神经网络的思维模式提出机器学习问题、如何使用向量化加速你的模型。
 
-### 2.1  二分分类（Binary Classification）
+### 2.1  [二分分类（Binary Classification）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/1_binary-classification/)
+
 ### 2.2  logistic 回归（Logistic Regression）
+
 ### 2.3  logistic 回归损失函数（Logistic Regression Cost Function）
 ### 2.4  梯度下降法（Gradient Descent）
+
 ### 2.5  导数（Derivatives）
+
 ### 2.6  更多导数的例子（More Derivative Examples）
+
 ### 2.7  计算图（Computation graph）
 ### 2.8  计算图的导数计算（Derivatives with a Computation Graph）
 ### 2.9  logistic 回归中的梯度下降法（Logistic Regression Gradient Descent）
@@ -69,7 +74,7 @@ date: 2017-12-11
 ### 2.17  Jupyter / Ipython 笔记本的快速指南（Quick tour of Jupyter/iPython Notebooks）
 ### 2.18  （选修）logistic 损失函数的解释（Explanation of logistic regression cost function (optional)）
 
- 
+
 ## 第三周  浅层神经网络（Shallow neural networks）
 
 学习使用前向传播和反向传播搭建出有一个隐藏层的神经网络。
@@ -86,7 +91,7 @@ date: 2017-12-11
 ### 3.10  （选修）直观理解反向传播（Backpropagation intuition (optional)）
 ### 3.11  随机初始化（Random Initialization）
 
- 
+
 ## 第四周  深层神经网络（Deep Neural Networks）
 
 理解深度学习中的关键计算，使用它们搭建并训练深层神经网络，并应用在计算机视觉中。
@@ -199,7 +204,7 @@ Google Brain 研究员，《深度学习》教科书的第一作者，生成对�
 
 
 ## 大师访谈
- 
+
 我在本微专业中采访了多位人工智能领域大师，希望你可以从他们的睿智回答中了解 AI 领域的专业建议。
 
 ### Yoshua Bengio
