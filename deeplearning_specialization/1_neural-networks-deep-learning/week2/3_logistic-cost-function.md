@@ -15,6 +15,8 @@ title: 神经网络和深度学习-第二周神经网络基础-第三节：Logis
 date: 2017-12-26
 ---
 
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
+
 在上一节中，讲解的是logistic回归模型。为了训练回归模型参数w和b，我们需要定义一个成本函数（cost function）。这是上一节中的函数：
 $$
 \begin{equation}
