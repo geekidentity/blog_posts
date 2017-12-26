@@ -10,7 +10,7 @@ tags:
   - sigmoid函数
 
 
-title: 神经网络和深度学习-第二周神经网络基础-第二节：Logistic回归
+title: 神经网络和深度学习-第二周神经网络基础-第三节：Logistic 回归损失函数
 
 date: 2017-12-26
 ---
