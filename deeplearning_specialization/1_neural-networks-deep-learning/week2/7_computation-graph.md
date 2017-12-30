@@ -13,6 +13,8 @@ title: 神经网络和深度学习-第二周神经网络基础-第七节：计�
 date: 2017-12-30
 ---
 
+本系列博客是吴恩达(Andrew Ng)[深度学习工程师](http://mooc.study.163.com/smartSpec/detail/1001319001.htm) 课程笔记。全部课程请查看[吴恩达(Andrew Ng)深度学习工程师课程目录](http://blog.geekidentity.com/deeplearning_specialization/catalogues/)
+
 可以说，一个神经网络的计算都是按照前向或反向传播过程来实现的。首先计算出神经网络的输出，紧接着进行一个反向传输操作，后者我们用来计算出对应梯度或者导数。而计算图解释了为什么用这样的方式这样实现。
 
 为了阐明这个计算过程，我们举一个比logistic回归更加简单的，不那么正式的神经网络的例子。我们计算函数$J$：
