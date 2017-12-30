@@ -52,17 +52,20 @@ date: 2017-12-11
 
 ### 2.1  [二分分类（Binary Classification）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/1_binary-classification/)
 
-### 2.2  logistic 回归（Logistic Regression）
+### 2.2  [logistic 回归（Logistic Regression）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/2_logistic-regression/)
 
-### 2.3  logistic 回归损失函数（Logistic Regression Cost Function）
-### 2.4  梯度下降法（Gradient Descent）
+### 2.3  [logistic 回归损失函数（Logistic Regression Cost Function）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/3_logistic-cost-function/)
+
+### 2.4  [梯度下降法（Gradient Descent）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/4_gradient-descent/)
 
 ### 2.5  导数（Derivatives）
 
 ### 2.6  更多导数的例子（More Derivative Examples）
 
-### 2.7  计算图（Computation graph）
+### 2.7  [计算图（Computation graph）](http://blog.geekidentity.com/deeplearning_specialization/1_neural-networks-deep-learning/week2/7_computation-graph/)
+
 ### 2.8  计算图的导数计算（Derivatives with a Computation Graph）
+
 ### 2.9  logistic 回归中的梯度下降法（Logistic Regression Gradient Descent）
 ### 2.10  m 个样本的梯度下降（Gradient Descent on m Examples）
 ### 2.11  向量化（Vectorization）
