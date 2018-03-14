@@ -6,7 +6,7 @@ tags:
   - kubernetes
   - kops
 
-title: kops HTTP正向代理支持
+title: kops HTTP转发代理支持
 
 date: 2018-03-14
 
