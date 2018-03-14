@@ -1,3 +1,16 @@
+---
+categories: k8s
+
+tags: 
+  - k8s
+  - kubernetes
+  - kops
+
+title: kops HTTP正向代理支持
+
+date: 2018-03-14
+
+---
 # HTTP Forward Proxy Support
 
 可以从http转发代理（“corporate proxy”）后面启动Kubernetes群集。 为此，需要为群集配置egressProxy。
