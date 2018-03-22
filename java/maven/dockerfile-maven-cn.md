@@ -212,7 +212,7 @@ gcloud auth application-default login
 
 ## 使用maven pom.xml进行身份验证
 
-从版本1.3.XX开始，你可以使用pom本身的配置进行身份验证。 只需添加类似于以下配置：
+从版本1.3.XX开始，你可以使用pom本身的配置进行身份验证。 只需添加类似于以下配置（经测试，在1.4.0版本中向私有仓库push时会报错 denied: requested access to the resource is denied，所以建议使用maven settings.xml进行身份验证）：
 
 ```xml
 <plugin>
