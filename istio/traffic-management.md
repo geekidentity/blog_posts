@@ -1,3 +1,12 @@
+---
+categories: Istio
+tags:
+  - Istio
+
+title: Istio 流量管理
+date: 2018-06-27
+---
+
 # 综述
 
 本页面概述了Istio中流量管理的工作原理，包括流量管理原则的优点。我们假定你已经阅读了[什么是Istio](https://istio.io/docs/concepts/what-is-istio/overview/)？ 并熟悉Istio的高层架构。 您可以在本节的其他指南中找到有关流量管理功能的更多信息。
