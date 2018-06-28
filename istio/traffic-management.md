@@ -68,3 +68,41 @@ Istio不提供DNS。 应用程序可以尝试使用底层平台中存在的DNS�
 Istio假设进入和离开服务网格的所有流量都通过Envoy代理。通过在服务前面部署Envoy代理，运维人员可以进行A/B测试，金丝雀部署服务等，以用于面向用户的服务。 同样，运维人员可以通过sidecar Envoy将流量路由到外部Web服务（例如，访问Maps API或视频服务API），从而增加故障恢复功能，例如超时，重试，断路器等，并获取详细信息 有关这些服务连接的度量标准。
 
 ![Ingress and Egress through Envoy.](https://istio.io/docs/concepts/traffic-management/img/pilot/ServiceModel_RequestFlow.svg)
+
+# 服务发现和负载均衡
+
+本节介绍Istio如何负载均衡服务网格中服务实例间的流量。
+
+**服务注册**：Istio假设存在一个服务注册中心，以跟踪应用程序中服务的Pod/VM。它还假设新的服务实例会自动注册到服务注册中心，不健康的实例会被自动删除。Kubernetes，Mesos等平台已经为基于容器的应用程序提供了这样的功能。 基于VM的应用程序存在过多的解决方案。
+
+**服务发现**：Pilot 使用来自服务注册中心的信息并提供与平台无关的服务发现接口。Mesh中的Envoy实例执行服务发现并相应地动态更新其负载均衡池。
+
+![Discovery and Load Balancing](https://istio.io/docs/concepts/traffic-management/img/pilot/LoadBalancing.svg)
+
+如上图所示，网格中的服务使用其DNS名称相互访问。 绑定到服务的所有HTTP流量都会通过Envoy自动重新路由。 Envoy 在负载均衡池中的实例之间分配流量。 虽然Envoy支持[多种复杂的负载均衡算法](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/load_balancing)，但Istio目前允许三种负载均衡模式：轮询，随机和权重最小请求。
+
+除了负载平衡之外，Envoy还会定期检查负载均衡池中每个实例的健康状况。Envoy遵循断路器配置模式，根据健康检查API调用的故障率将实例归类为健康或不健康。 换句话说，当给定实例的状况检查失败次数超过预先指定的阈值时，它将从负载均衡池中移除。类似地，当运行状况检查数超过预先指定的健康阈值时，实例将被添加回负载均衡池。 你可以在[处理故障](https://istio.io/docs/concepts/traffic-management/handling-failures/)中找到有关Envoy故障处理功能的更多信息。
+
+服务可以通过HTTP 503响应健康检查来积极减轻负载。 在这种情况下，服务实例将立即从调用者的负载平衡池中移除。
+
+# 故障处理
+
+Envoy提供了一套开箱即用的插拔式故障恢复功能，可以在应用程序中利用这些功能。功能包括：
+
+1. 超时
+2. 根据超时时间和重试次数、间隔等配置进行重试
+3. 并发连接数和对上游服务的请求限制
+4. 对负载均衡池的每个成员进行主动（定期）健康检查
+5. 针对负载平衡池中针对每个实例应用的细粒度断路器（被动健康检查）
+
+这些功能可以在运行时通过[Istio的流量管理规则](https://istio.io/docs/concepts/traffic-management/rules-configuration/)进行动态配置。
+
+重试之间的抖动使重试对超负载的上游服务的影响最小，而超时设置可确保调用服务在可预测的时间范围内获得响应（成功/失败）。
+
+主动和被动健康检查（上述4和5）的组合可最大限度地减少访问负载均衡池中不健康实例的机会。与平台级健康检查（如Kubernetes或Mesos支持的那些）结合使用时，应用程序可以确保不健康的pods/容器/虚拟机可以快速服务网格中清除，从而最大限度地减少请求失败并减少对延迟的影响。
+
+这些功能一起使服务网格能够容忍失败的nodes ，并防止由于级联不稳定而导致本地故障影响到其他nodes。
+
+## 微调
+
+Istio的流量管理规则允许运维为每个服务/版本的故障恢复设置全局默认值。但是，服务的使用者也可以通过特殊的HTTP头提供请求级覆盖来覆盖超时和重试默认值。 通过Envoy代理实现，头文件分别是x-envoy-upstream-rq-timeout-ms和x-envoy-max-retries。
