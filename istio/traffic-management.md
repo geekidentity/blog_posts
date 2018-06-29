@@ -133,3 +133,47 @@ Istio支持将指定协议的故障注入到网络中，而不是杀死Pod，延
 
 # 规则配置
 
+Istio提供了一个简单的配置模型来控制API调用和第4层流量如何在应用程序中的各种服务之间流动。配置模型允许运维配置服务级属性，如断路器，超时，重试，以及设置常见的持续部署任务，如金丝雀部署，A/B测试，基于百分比流量的分阶段发布等。
+
+例如，可以使用以下配置将reviews服务的传入流量的100％发送到版本“v1”：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+
+```
+
+该配置表示发送到reviews服务（在`hosts` 字段中指定）的流量应该路由到reviews服务实例的v1子集中。 路由`subset` 在相应的目标规则配置中指定定义的子集的名称：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+
+```
+
+subset 指定一个或多个标识版本实例的标签。例如，在Istio的Kubernetes部署中，“version：v1”表示只有包含“version：v1”标签的pod才会接收流量。
+
+可以使用[istioctl CLI](https://istio.io/docs/reference/commands/istioctl/)配置规则，也可以使用kubectl命令在Kubernetes deployment 中配置规则，但只有istioctl 会验证模型是否正确，我们建议使用istioctl 。 有关示例，请参阅[配置请求路由任务](https://istio.io/docs/tasks/traffic-management/request-routing/)。
+
+Istio中有四种流量管理配置资源：VirtualService，DestinationRule，ServiceEntry和Gateway。 下面介绍使用这些资源的一些重要方面。详细信息请参阅参考。
