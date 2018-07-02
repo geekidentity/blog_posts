@@ -455,3 +455,100 @@ spec:
 
 ### HTTP路由规则优先级
 
+当给定destination有多个规则时，它们按照它们在VirtualService中出现的顺序进行评估，即列表中的第一个规则具有最高优先级。
+
+**为什么优先级重要？** 如果服务的路由规则纯粹是基于权重的时候，就可以在单个规则中配置它。但是，当使用其他标准（例如，来自特定用户的请求）来路由流量时，需要多个规则来配置路由。这里必须仔细考虑规则优先级，以确保以正确的顺序执行规则。
+
+通用路由规范的一种常见模式是提供一个或多个优先级更高的规则，以便通过source/headers来限定规则，然后提供一个没有匹配条件的单个基于权重的规则，最后为所有其他情况提供流量的加权分配。
+
+例如，以下VirtualService包含2个规则，这些规则一起指定包含名为“Foo”且值为“bar”的header的reviews服务的所有请求都将发送到“v2”实例。 所有其余的请求将被发送到“v1”。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - match:
+    - headers:
+        Foo:
+          exact: bar
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+
+```
+
+请注意，这里配置中基于header的规则具有更高的优先级。如果它较低，这些规则将不会如预期的那样工作，因为基于权重的规则（没有特定的匹配标准）将首先被评估，然后将所有流量简单地路由到“v1”，甚至包括匹配的“Foo “头。一旦找到适用于传入请求的规则，它将被执行并且规则评估过程将终止。 这就是为什么当存在多个规则时仔细考虑每个规则的优先级是非常重要的。
+
+## Destination Rules
+
+[DestinationRule](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#DestinationRule)配置在虚拟服务路由发生后，应用于请求的一组策略。它们由服务所有者去配置定义，描述断路器，负载平衡器设置，TLS设置等。
+
+DestinationRule还定义相应目的地主机的可寻址子集（即，版本名）。 在将流量发送到特定版本的服务时，这些子集用于VirtualService路由规范。
+
+以下`DestinationRule` 配置reviews 服务的策略和subsets ：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+  - name: v3
+    labels:
+      version: v3
+
+```
+
+请注意，可以在单个DestinationRule配置中指定多个策略（例如，默认和v2）。
+
+### 断路器
+
+可以根据许多标准（例如连接和请求限制）设置简单的断路器。
+
+例如，以下DestinationRule设置了与reviews 服务版本“v1”后端限制100个连接。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+
+```
+
+查看断路器控制的[断路任务](https://istio.io/docs/tasks/traffic-management/circuit-breaking/)演示。
+
+### DestinationRule evaluation
