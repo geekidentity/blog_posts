@@ -174,6 +174,284 @@ spec:
 
 subset 指定一个或多个标识版本实例的标签。例如，在Istio的Kubernetes部署中，“version：v1”表示只有包含“version：v1”标签的pod才会接收流量。
 
-可以使用[istioctl CLI](https://istio.io/docs/reference/commands/istioctl/)配置规则，也可以使用kubectl命令在Kubernetes deployment 中配置规则，但只有istioctl 会验证模型是否正确，我们建议使用istioctl 。 有关示例，请参阅[配置请求路由任务](https://istio.io/docs/tasks/traffic-management/request-routing/)。
+可以使用[istioctl CLI](https://istio.io/docs/reference/commands/istioctl/)配置规则，也可以使用kubectl命令在Kubernetes deployment 中配置规则，但只有istioctl 会验证配置是否正确，我们建议使用istioctl 。 有关示例，请参阅[配置请求路由任务](https://istio.io/docs/tasks/traffic-management/request-routing/)。
 
-Istio中有四种流量管理配置资源：VirtualService，DestinationRule，ServiceEntry和Gateway。 下面介绍使用这些资源的一些重要方面。详细信息请参阅参考。
+Istio中有四种流量管理配置资源：VirtualService，DestinationRule，ServiceEntry和Gateway。 下面介绍使用这些资源的一些重要方面。详细信息请参阅[参考](https://istio.io/docs/reference/config/istio.networking.v1alpha3/)。
+
+## Virtual Services
+
+[VirtualService](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#VirtualService)定义了控制服务请求如何在Istio服务网格中路由的规则。例如，virtual service可以将请求路由到不同版本的服务，或者实际上可以将请求路由到完全不同的服务。 请求可以根据请求源和目标、HTTP路径和header 字段以及与各个服务版本相关的权重进行路由。
+
+### Rule destinations
+
+路由规则对应于VirtualService配置中指定的一个或多个请求目标hosts。 这些hosts可能与实际的目标工作负载相同也可能不同，甚至可能没有对应网格中的实际可路由服务。例如，要使用其内部网格名称reviews 或通过hostbookinfo.com为请求评论服务定义路由规则，VirtualService可以有一个hosts字段，如下所示：
+
+```yaml
+hosts:
+  - reviews
+  - bookinfo.com
+```
+hosts字段隐式或显式指定一个或多个全限定域名（FQDN）。上面的短名称reviews将隐式扩展为FQDN。 例如，在Kubernetes环境中，reviews完整的域名为来自VirtualSevice的集群和名称空间（例如，reviews.default.svc.cluster.local）。
+
+### 通过source/headers 来限定规则
+
+Rules 可以选择性地限定为仅适用于匹配某些特定条件的请求，例如以下条件：
+
+1. 限制为特定调用者。 例如，Rules 可以指定ratings仅适用于来自reviews 服务（pods）的的调用。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+      sourceLabels:
+        app: reviews
+    ...
+
+```
+
+`sourceLabels` 的值取决于service的实现。 例如，在Kubernetes中，它可能与相应Kubernetes 中pod选择器中使用的标签相同。
+
+2. 限制为特定版本的调用者。 例如，以下规则将之前示例限定为仅允许*reviews* 服务“v2”版本的调用。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - sourceLabels:
+        app: reviews
+        version: v2
+    ...
+
+```
+
+3. 根据HTTP headers选择规则。 例如，以下规则仅适用于包含字符串“user = jason”的“cookie”头的请求。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?$"
+    ...
+
+```
+
+如果配置了多个header，则必须所有的header全部匹配才可以。
+
+可以同时设置多个标准。 在这种情况下，根据嵌套情况，使用AND或OR语义。 如果多个条件嵌套在单个匹配子句中，则条件为ANDed。 例如，以下规则仅适用于请求的来源为“reviews:v2”且包含“user = jason”的“cookie”的情况。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - sourceLabels:
+        app: reviews
+        version: v2
+      headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?$"
+    ...
+
+```
+
+相反，如果条件显示在单独的匹配条件中，则有一个匹配即可（OR语义）：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - sourceLabels:
+        app: reviews
+        version: v2
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(user=jason)(;.*)?$"
+    ...
+
+```
+
+### 在服务版本之间拆分流量
+
+每条路由规则标识一个或多个加权后端，以便在规则激活时进行调用。每个后端对应于目标服务的特定版本，其中版本可以使用标签表示。如果多个已注册实例有相同的标签，则根据配置的负载平衡策略进行路由，默认为循环。
+
+例如，以下规则将reviews 服务的25％流量路由到具有“v2”标签的实例，剩余流量（即75％）路由到“v1”。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 75
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 25
+
+```
+
+### 超时和重试
+
+默认情况下，http请求的超时时间为15秒，但是这可以在路由规则中配置，如下所示：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+    - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+    timeout: 10s
+
+```
+
+也可以在路由规则中配置http请求的重试次数。 在超时期限内，最大尝试次数或尽可能多的尝试次数可以设置如下：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+    - ratings
+  http:
+  - route:
+    - destination:
+        host: ratings
+        subset: v1
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+
+```
+
+请注意，请求超时和重试也可以[基于每个请求](https://istio.io/docs/concepts/traffic-management/handling-failures#fine-tuning)进行配置。
+
+请参阅[请求超时任务](https://istio.io/docs/tasks/traffic-management/request-timeouts/)以了解超时控制的示例。
+
+### 注入请求路径中的错误
+
+路由规则可以指定一个或多个故障注入（人为制造故障），同时将http请求转发到规则的相应请求目标。 故障可以是延迟或中止。
+
+以下示例将向微服务ratings “v1”版本的10％请求中引入5秒延迟。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - fault:
+      delay:
+        percent: 10
+        fixedDelay: 5s
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+
+```
+
+另一种类型的故障，中止，可用于模拟请求中断故障。
+
+以下示例会将ratings 服务“v1”版本10％请求的HTTP请求返回 400错误代码。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - fault:
+      abort:
+        percent: 10
+        httpStatus: 400
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+
+```
+
+有时延迟和中止故障一起使用。例如，以下规则将从reviews 服务“v2”到评ratings 服务“v1”的所有请求延迟5秒，然后中止10％：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ratings
+spec:
+  hosts:
+  - ratings
+  http:
+  - match:
+    - sourceLabels:
+        app: reviews
+        version: v2
+    fault:
+      delay:
+        fixedDelay: 5s
+      abort:
+        percent: 10
+        httpStatus: 400
+    route:
+    - destination:
+        host: ratings
+        subset: v1
+```
+
+要查看故障注入的实际情况，请参阅[故障注入任务](https://istio.io/docs/tasks/traffic-management/fault-injection/)。
+
+### HTTP路由规则优先级
+
