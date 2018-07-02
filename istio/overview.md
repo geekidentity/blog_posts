@@ -3,7 +3,7 @@ categories: Istio
 tags:
   - Istio
 
-title: Istio 综述
+title: Istio 综述与设计目标
 date: 2018-06-26
 ---
 
