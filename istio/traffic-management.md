@@ -4,7 +4,7 @@ tags:
   - Istio
 
 title: Istio 流量管理
-date: 2018-06-27
+date: 2018-07-02
 ---
 
 # 综述
@@ -552,3 +552,170 @@ spec:
 查看断路器控制的[断路任务](https://istio.io/docs/tasks/traffic-management/circuit-breaking/)演示。
 
 ### DestinationRule evaluation
+
+与路由规则类似，策略与特定*host*相关联，但是如果它们配置了子集，则激活哪个取决于路由规则评估结果。
+
+规则评估过程中的第一步评估与所请求的主机相对应的VirtualService中的路由规则（如果定义了），以确定当前请求将被路由到的目的地服务的subset （即，特定版本）。 接下来，评估与所选子集相对应的一组策略，以确定它们是否适用。
+
+**注意**：要牢记算法的一个细微之处在于，只有在相应的子集被明确路由到时才会应用为特定子集定义的策略。 例如，考虑以下配置，作为为评论服务定义的唯一规则（即相应虚拟服务中没有路由规则） 。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 100
+
+```
+
+由于没有为reviews 服务定义特定的路由规则，因此将应用默认的循环路由行为，有时可能会调用“v1”实例，如果“v1”是唯一正在运行的版本，甚至可能始终会调用“v1”实例。 不过，由于默认路由是在较低级别完成的，因此不会调用上述策略。 规则评估引擎将不知道最终目标，因此无法将子集策略与请求匹配。
+
+你可以通过以下两种方式之一修复上述示例。你可以将流量策略向上移动一个级别以适用于任何版本：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+
+```
+
+或者更好的是，为服务定义合适的路由规则。 例如，您可以为“reviews:v1”添加简单的路由规则。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+
+```
+
+虽然默认的Istio行为可以不设置任何规则就方便地将流量从任何源发送到目标服务的所有版本，但只要需要版本区分，就需要规则。 因此，最佳做法是从一开始就为每项服务设置默认规则。
+
+## Service Entries
+
+ServiceEntry用于将其他条目添加到Istio内部维护的服务注册表中。 它最常用于启用Istio服务网格外服务的请求。 例如，以下ServiceEntry可用于允许对* .foo.com域名下托管的服务进行外部调用。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: foo-ext-svc
+spec:
+  hosts:
+  - *.foo.com
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  - number: 443
+    name: https
+    protocol: HTTPS
+
+```
+
+ServiceEntry的目标是使用hosts字段指定的，该字段可以是完全限定的域名或通配符域名。 它表示允许服务网格中的服务访问的一个或多个服务的白名单中。
+
+ServiceEntry不限于外部服务配置，它可以有两种类型：网格内部或网格外部。 网格内部条目与所有其他内部服务一样，但用于向网格显式添加服务。 它们可用于添加服务，作为扩展服务网格以包含非托管基础架构（例如，添加到基于Kubernetes的服务网格的VM）的一部分。 网格外部条目代表网格外部的服务。 对于他们来说，mTLS身份验证被禁用，并且在客户端执行策略实施，而不是在通常的服务器端执行内部服务请求。
+
+只要服务条目使用匹配的hosts引用服务，服务条目就可以与虚拟服务和目标规则配合使用。 例如，可以将以下规则与上述ServiceEntry规则结合使用，以便在bar.foo.com上为外部服务的呼叫设置10秒超时。
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bar-foo-ext-svc
+spec:
+  hosts:
+    - bar.foo.com
+  http:
+  - route:
+    - destination:
+        host: bar.foo.com
+    timeout: 10s
+
+```
+
+规则重定向和转发流量，定义重试，超时和故障注入策略都支持外部地址。 然而，加权（基于版本）路由是不可以的，因为没有多个外部服务版本的概念。
+
+查看[出口任务](https://istio.io/docs/tasks/traffic-management/egress/) 以获取更多关于访问外部服务的信息。
+
+## Gateways
+
+[网关](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#Gateway)为HTTP/TCP流量配置负载均衡器，通常在服务网格的边缘运行，以便为应用程序启用入口流量。
+
+与Kubernetes Ingress不同，Istio Gateway仅配置网络中L4-L6层的功能（例如，要暴露的端口，TLS配置）。 然后，用户可以使用标准的Istio规则来控制HTTP请求，以及通过绑定VirtualService来控制进入网关的TCP流量。
+
+例如，以下网关配置负载均衡器，以允许主机bookinfo.com的外部https流量进入网格：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - bookinfo.com
+    tls:
+      mode: SIMPLE
+      serverCertificate: /tmp/tls.crt
+      privateKey: /tmp/tls.key
+
+```
+
+要配置相应的路由，必须为同一个主机定义一个VirtualService，并使用配置中的gateways 字段绑定到网关：
+
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  hosts:
+    - bookinfo.com
+  gateways:
+  - bookinfo-gateway # <---- bind to gateway
+  http:
+  - match:
+    - uri:
+        prefix: /reviews
+    route:
+    ...
+
+```
+
+有关完整的入口网关示例，请参阅[ingress任务](https://istio.io/docs/tasks/traffic-management/ingress/)。
+
+虽然主要用于管理入口流量，但也可以使用网关对纯粹的内部或出口代理进行建模。无论内部或外部网络，所有网关都可以用相同的方式进行配置和控制。 有关详细信息，请参阅[网关参考](https://istio.io/docs/reference/config/istio.networking.v1alpha3/#Gateway)。
