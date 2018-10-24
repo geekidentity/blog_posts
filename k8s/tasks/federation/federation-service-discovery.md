@@ -1,3 +1,16 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - kubernetes
+
+title: 使用Federated Services 进行跨集群服务发现
+
+date: 2018-06-23
+
+---
+
 # 使用Federated Services 进行跨集群服务发现
 
 本指南介绍了如何使用Kubernetes Federated Services跨多个Kubernetes集群部署服务。这让你可以轻松地为你的Kubernetes应用程序实现跨集群服务发现和可用区(AZ)容错。
