@@ -1,3 +1,17 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - kubernetes
+  - kops
+
+title: 使用 kops 在 AWS 部署 Kubernetes 集群
+
+date: 2018-06-12
+
+---
+
 # 使用 kops 在 AWS 部署 Kubernetes 集群
 
 ​    [kops](https://github.com/kubernetes/kops) 是官方推荐的工具，用来在 AWS 生产环境中，快速地部署 Kubernetes 集群。	
