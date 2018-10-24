@@ -1,3 +1,16 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - kubernetes
+
+title: 使用Kubefed安装集群Federation 
+
+date: 2018-06-24
+
+---
+
 # 使用Kubefed安装集群Federation 
 
 Kubernetes1.5及以上版本包含一个名为[kubefed](https://kubernetes.io/docs/admin/kubefed/)的命令行工具，可帮助你管理Federation 集群。`kubefed` 可帮助你部署Kubernetes集群federation控制台，并将集群添加到现有federation控制台或从现有federation控制台删除集群。
