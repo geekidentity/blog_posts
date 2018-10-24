@@ -1,3 +1,16 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - kubernetes
+
+title: Kubernetes 高可用 (HA)
+
+date: 2018-06-12
+
+---
+
 # 高可用 (HA)
 
 ## 介绍

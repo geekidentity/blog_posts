@@ -1,3 +1,16 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - kubernetes
+
+title: Kubernetes 引导启动
+
+date: 2018-06-12
+
+---
+
 # Kubernetes 引导启动
 
 这是使用kops时，关于Kubernetes集群是如何建立启动的概述。
