@@ -8,7 +8,7 @@ tags:
 
 title: 亲和性和反亲和性
 
-date: 2018-03-17
+date: 2018-10-25
 
 ---
 
@@ -32,6 +32,10 @@ node 亲和性在 Kubernetes 1.2 中作为 alpha 引入。node 亲和性在概�
 目前有两种类型的 node 亲和：requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution ，前者是将 pod 调度 node 上必须满足的规则，后者指调度程序将尝试执行但不一定满足规则。IgnoredDuringExecution 与 nodeSelector 工作方式类似，如果 node 上的标签在运行时发生了变化，此时即使标签不再满足 pod 上的亲和性规则，pod 仍将会在节点上继续运行。未来计划提供 requiredDuringSchedulingRequiredDuringExecution，这将像 requiredDuringSchedulingIgnoredDuringExecution 一样，除了它将从不再满足pod的node 亲和性要求的 node 中驱逐 pod。
 
 因此下面 requiredDuringSchedulingIgnoredDuringExecution 的示例将“仅在具有Intel CPU的节点上运行pod”，并且示例 preferredDuringSchedulingIgnoredDuringExecution 将“尝试在可用区XYZ中运行这组 pod，但如果不可能，则允许一些在其他地方运行”。
+
+node 亲和性在PodSpec中指定为 affinity.nodeAffinity。
+
+以下是使用 node 亲和性的 pod 的示例：
 
 ```yaml
 pods/pod-with-node-affinity.yaml  
@@ -63,4 +67,10 @@ spec:
     image: k8s.gcr.io/pause:2.0
 
 ```
+
+此 node 亲和性规则表示，该 pod 只能放置在标签的键为 kubernetes.io/e2e-az-name 其值为 e2e-az1 或 e2e-az2 的 node 上。 此外，在满足该条件的 node 中，应优先选择具有其键为 another-node-label-key 且其值为 another-node-label-value 的标签的 node。
+
+在示例中可以看到运算符 In。 新的 node 亲和性语法支持以下运算符：In，NotIn，Exists，DoesNotExist，Gt，Lt。您可以使用 NotIn 和 DoesNotExist 来实现 node 反亲和性，或使用 node taints 来排除特定 node。
+
+如果同时指定 nodeSelector 和 nodeAffinity，则必须满足两者才能将 pod 调度到候选节点上。
 
