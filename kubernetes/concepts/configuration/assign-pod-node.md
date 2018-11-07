@@ -19,9 +19,7 @@ nodeSelector 提供了一种非常简单的方法，将 pod 分配到有指定 l
 
 1. 更丰富的语言（不在是精确匹配）。
 2. 你可以指明规则是 soft/preference，而不是必须满足规则，这样如果调度规则无法满足，pod 依然可以正常分配到 node 上。
-3. ​
-
-亲和性策略有两种类型的亲和性：node 亲和、pod之间的亲和与反亲和。node 亲和有点像 nodeSelector （当然有上面列举的前两个改进）。pod 之间的亲和与反亲和性将会限制 pod 的调度。
+3. ​亲和性策略有两种类型的亲和性：node 亲和、pod之间的亲和与反亲和。node 亲和有点像 nodeSelector （当然有上面列举的前两个改进）。pod 之间的亲和与反亲和性将会限制 pod 的调度。
 
 nodeSelector 现在可以正常使用，但最终会被弃用，因为 node 亲和性可以代替 nodeSelector 所有功能。
 
@@ -49,26 +47,25 @@ spec:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
-          - key: kubernetes.io/e2e-az-name
+          - key: beta.kubernetes.io/arch
             operator: In
             values:
-            - e2e-az1
-            - e2e-az2
+            - amd64
       preferredDuringSchedulingIgnoredDuringExecution:
       - weight: 1
         preference:
           matchExpressions:
-          - key: another-node-label-key
+          - key: disk-type
             operator: In
             values:
-            - another-node-label-value
+            - ssd
   containers:
   - name: with-node-affinity
     image: k8s.gcr.io/pause:2.0
 
 ```
 
-此 node 亲和性规则表示，该 pod 只能放置在标签的键为 kubernetes.io/e2e-az-name 其值为 e2e-az1 或 e2e-az2 的 node 上。 此外，在满足该条件的 node 中，应优先选择具有其键为 another-node-label-key 且其值为 another-node-label-value 的标签的 node。
+此 node 亲和性规则表示，该 pod 只能放置在标签的键为 beta.kubernetes.io/arch 其值为 arm64 的 node 上。 此外，在满足该条件的 node 中，应优先选择具有其键为 disk-type 且其值为 ssd 的标签的 node。
 
 在示例中可以看到运算符 In。 新的 node 亲和性语法支持以下运算符：In，NotIn，Exists，DoesNotExist，Gt，Lt。您可以使用 NotIn 和 DoesNotExist 来实现 node 反亲和性，或使用 node taints 来排除特定 node。
 
