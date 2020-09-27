@@ -1,3 +1,17 @@
+---
+categories: Kubernetes
+
+tags: 
+  - k8s
+  - Kubernetes
+
+
+title: Pod 垂直扩缩容
+
+date: 2018-11-22
+
+---
+
 # Pod 垂直扩缩容
 
 ## 简介
